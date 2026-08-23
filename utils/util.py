@@ -4,7 +4,7 @@ from skimage import filters, morphology, measure
 from scipy.ndimage import gaussian_filter
 from skimage.segmentation import watershed
 import torch
-from config import PatchConfig
+from utils.config import PatchConfig
 from patchify import patchify
 from tqdm import tqdm
 

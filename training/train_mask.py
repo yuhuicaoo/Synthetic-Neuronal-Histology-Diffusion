@@ -1,15 +1,15 @@
 import torch
 import time
 from model.mask_diffusion import Mask_Diffusion
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 from tqdm import tqdm
 from torch.optim import AdamW
 from torch.amp import GradScaler, autocast
-from plotting import save_samples
-from config import TREATMENT_MAP, REGION_MAP, TREATMENT_GROUPS, REGION_GROUPS
+from utils.plotting import save_samples
+from utils.config import TREATMENT_MAP, REGION_MAP, TREATMENT_GROUPS, REGION_GROUPS
 import random
 import os
-from training_funcs import EMA
+from training.training_funcs import EMA
 
 def train_model(train_loader, val_loader, save_dir=None):
     torch.manual_seed(seed=42)

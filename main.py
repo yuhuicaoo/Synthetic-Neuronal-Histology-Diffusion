@@ -3,16 +3,16 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '3'
 os.environ['HF_HOME'] = '/eresearch/hie/ycao891/Yuhui/hf_cache'
 os.environ['TORCH_HOME'] = '/eresearch/hie/ycao891/Yuhui/torch_cache'
 
-from config import TREATMENT_GROUPS, REGION_GROUPS, PatchConfig
-from load_data import load_image_mask_pairs, split_dataset
+from utils.config import TREATMENT_GROUPS, REGION_GROUPS, PatchConfig
+from data.load_data import load_image_mask_pairs, split_dataset
 from pathlib import Path
-from util import collate_fn
-from create_dataset import NeuronDataset
+from utils.util import collate_fn
+from data.create_dataset import NeuronDataset
 from torch.utils.data import DataLoader
-from train_mask import train_model
-from train_image import train_image_model
+from training.train_mask import train_model
+from training.train_image import train_image_model
 import pandas as pd
-from plotting import plot_metrics, plot_scores
+from utils.plotting import plot_metrics, plot_scores
 
 if __name__ == "__main__":
     ds_root = Path("Neuron Dataset")

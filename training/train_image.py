@@ -1,12 +1,12 @@
 import torch
 import time
 from model.controlnetImage_diffusion import ControlNetImageDiffusion
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 from tqdm import tqdm
 from torch.optim import AdamW
 from torch.amp import GradScaler, autocast
-from plotting import save_image_samples
-from training_funcs import sample_with_ema, evaluate_kid, EMA
+from utils.plotting import save_image_samples
+from training.training_funcs import sample_with_ema, evaluate_kid, EMA
 
 def train_image_model(train_loader, val_loader, save_dir):
     torch.manual_seed(seed=42)

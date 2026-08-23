@@ -3,14 +3,14 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '5'
 os.environ['HF_HOME'] = '/eresearch/hie/ycao891/Yuhui/hf_cache'
 os.environ['TORCH_HOME'] = '/eresearch/hie/ycao891/Yuhui/torch_cache'
 
-from load_data import load_image_mask_pairs, get_split_for_fold, get_subsample_of_dataset
+from data.load_data import load_image_mask_pairs, get_split_for_fold, get_subsample_of_dataset
 from pathlib import Path
-from util import collate_fn_segm, get_patches
-from config import TREATMENT_GROUPS, REGION_GROUPS, PatchConfig
+from utils.util import collate_fn_segm, get_patches
+from utils.config import TREATMENT_GROUPS, REGION_GROUPS, PatchConfig
 from torch.utils.data import DataLoader, Subset
-from create_dataset import PatchDataset
+from data.create_dataset import PatchDataset
 from model.swin_maskRCNN import create_maskrcnn_resnet50
-from train_segmentation import run_segmentation_training
+from training.train_segmentation import run_segmentation_training
 import numpy as np
 import torch
 import random

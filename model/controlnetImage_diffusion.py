@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 from diffusers import AutoencoderKL, UNet2DConditionModel, ControlNetModel, DDPMScheduler, DDIMScheduler
 from peft import LoraConfig
 

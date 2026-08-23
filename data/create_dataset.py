@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
-from util import create_neuron_structure
-from config import TREATMENT_MAP, REGION_MAP, PatchConfig
+from utils.util import create_neuron_structure
+from utils.config import TREATMENT_MAP, REGION_MAP, PatchConfig
 import numpy as np
 import torch
 import random

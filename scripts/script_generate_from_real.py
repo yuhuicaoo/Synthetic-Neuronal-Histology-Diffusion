@@ -9,13 +9,13 @@ from torch.utils.data import DataLoader
 from torchmetrics.image.fid import FrechetInceptionDistance
 from torchmetrics.image.kid import KernelInceptionDistance
 from tqdm import tqdm
-from util import get_patches_2
+from utils.util import get_patches_2
 from pathlib import Path
-from config import TREATMENT_GROUPS, REGION_GROUPS
-from config import DiffusionConfig, PatchConfig
+from utils.config import TREATMENT_GROUPS, REGION_GROUPS
+from utils.config import DiffusionConfig, PatchConfig
 from model.controlnetImage_diffusion import ControlNetImageDiffusion
-from create_dataset import NeuronPatchDataset
-from load_data import load_image_mask_pairs
+from data.create_dataset import NeuronPatchDataset
+from data.load_data import load_image_mask_pairs
 
 @torch.no_grad
 def generate_from_real_structure(image_model, loader, device, guidance_scale):

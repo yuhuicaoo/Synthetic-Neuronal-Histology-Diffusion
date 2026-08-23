@@ -1,9 +1,9 @@
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 from unet_model import ConditionedUnet_Image
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from util import cosine_beta_schedule
+from utils.util import cosine_beta_schedule
 
 class Image_Diffusion(nn.Module):
     def __init__(self, config: DiffusionConfig):

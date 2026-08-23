@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 import math
 from model.attention import MultiHeadAttention, SelfAttention2D
 

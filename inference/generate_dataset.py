@@ -11,10 +11,10 @@ import numpy as np
 from tqdm import tqdm
 from PIL import Image
 from pathlib import Path
-from util import watershed_postprocess
+from utils.util import watershed_postprocess
 from model.mask_diffusion import Mask_Diffusion
 from model.controlnetImage_diffusion import ControlNetImageDiffusion
-from config import DiffusionConfig, TREATMENT_GROUPS, TREATMENT_MAP, REGION_GROUPS, REGION_MAP
+from utils.config import DiffusionConfig, TREATMENT_GROUPS, TREATMENT_MAP, REGION_GROUPS, REGION_MAP
 
 if __name__ == '__main__':
     save_dir = Path('Neuron Dataset Generated 4')

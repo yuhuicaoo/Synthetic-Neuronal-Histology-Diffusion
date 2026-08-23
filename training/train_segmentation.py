@@ -1,4 +1,4 @@
-from config import SegmentationTrainingConfig
+from utils.config import SegmentationTrainingConfig
 from tqdm import tqdm
 from torch.optim import AdamW
 from torch.amp import GradScaler, autocast
@@ -6,7 +6,7 @@ from torchmetrics.detection.mean_ap import MeanAveragePrecision
 import time
 import math
 import torch
-from plotting import plot_metrics_segm
+from utils.plotting import plot_metrics_segm
 
 class EarlyStopper():
     def __init__(self, patience=5, delta=0.0):

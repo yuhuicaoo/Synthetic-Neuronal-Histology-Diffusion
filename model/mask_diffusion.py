@@ -1,9 +1,9 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from config import DiffusionConfig
+from utils.config import DiffusionConfig
 from model.unet_model import ConditionedUnet, ConditionedUnet_Image
-from util import cosine_beta_schedule
+from utils.util import cosine_beta_schedule
 
 class Mask_Diffusion(nn.Module):
     def __init__(self, config: DiffusionConfig):
