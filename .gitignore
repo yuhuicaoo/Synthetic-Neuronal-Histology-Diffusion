@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# VS Code settings
+.vscode/
+
+# Environment / secrets
+.env
+.venv/
+venv/
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Datasets
+datasets/
+Neuron Dataset*/
+
+# Training outputs
+outputs/
+logs/
+saves/
+*.csv
+
+# Hugging Face / PyTorch caches
+hf_cache/
+torch_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
