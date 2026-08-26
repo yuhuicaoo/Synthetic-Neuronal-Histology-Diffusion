@@ -2,8 +2,10 @@
 
 ## 🎯 Purpose
 <p align="justify">
-Neuronal histology datasets can be challenging to expand due to the time and resources required to collect and annotate high-quality biological images.I am researching whether diffusion models could be used to generate realistic synthetic neuronal histology data (image & mask), providing an alternative approach to data augmentation for downstream computer vision tasks, like instance segmentation. 
+Neuronal histology datasets can be challenging to expand due to the time and resources required to collect and annotate high-quality biological images.I am researching whether diffusion models could be used to generate realistic synthetic neuronal histology data (image & mask), providing an alternative approach to data augmentation for downstream computer vision tasks, like instance segmentation. Supervised by <a href="https://profiles.auckland.ac.nz/h-abbasi">Dr. Hamid Abassi</a> and <a href="https://profiles.auckland.ac.nz/callan-loomes">Callan Loomes</a>.
 </p>
+
+
 
 ## 🧠 Overview
 <p align="justify"> 
@@ -14,6 +16,7 @@ This project investigates a diffusion-based pipeline for generating synthetic ne
 <p align="justify"> 
 The dataset consists of neuronal histology images from a fetal sheep model of hypoxic-ischaemic (HI) injury. Images are categorised according to brain region and treatment group, providing multiple biological conditions for conditional generation. 
 </p>
+
 
 
 ## 🛠️ Tech Stack
