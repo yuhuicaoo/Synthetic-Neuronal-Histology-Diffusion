@@ -16,7 +16,6 @@ def train_image_model(train_loader, val_loader, save_dir):
         config = config,
         pretrained_model= 'sd-legacy/stable-diffusion-v1-5',
         train_unet = False,
-        unfreeze_last_n_down_blocks = 0,
         use_unet_lora = False,
         lora_rank = 4
     ).to(config.device)

@@ -52,7 +52,6 @@ class ControlNetImageDiffusion(nn.Module):
             config: DiffusionConfig, 
             pretrained_model: str = 'sd-legacy/stable-diffusion-v1-5',
             train_unet: bool = False,
-            unfreeze_last_n_down_blocks: int = 0,
             use_unet_lora: bool = False,
             lora_rank: int = 8
         ):
@@ -94,32 +93,12 @@ class ControlNetImageDiffusion(nn.Module):
         else:
             self.unet.eval()
 
-        self._freeze_controlnet_backbone(unfreeze_last_n_down_blocks)
-
         self.controlnet.train()
         self.label_conditioner.train()
 
         self.scaling_factor = self.vae.config.scaling_factor
 
         self._print_trainable_params()
-
-    def _freeze_controlnet_backbone(self, unfreeze_last_n_down_blocks=0):
-        for p in self.controlnet.parameters():
-            p.requires_grad_(False)
-        
-        for p in self.controlnet.controlnet_cond_embedding.parameters():
-            p.requires_grad_(True)
-        for p in self.controlnet.controlnet_down_blocks.parameters():
-            p.requires_grad_(True)
-        for p in self.controlnet.controlnet_mid_block.parameters():
-            p.requires_grad_(True)
-        for p in self.controlnet.conv_in.parameters():
-            p.requires_grad_(True)
-
-        if unfreeze_last_n_down_blocks > 0:
-            for block in self.controlnet.down_blocks[-unfreeze_last_n_down_blocks:]:
-                for p in block.parameters():
-                    p.requires_grad_(True)
 
     def _print_trainable_params(self):
         total = sum(p.numel() for p in self.controlnet.parameters())
@@ -128,7 +107,7 @@ class ControlNetImageDiffusion(nn.Module):
 
         unet_total = sum(p.numel() for p in self.unet.parameters())
         unet_trainable = sum(p.numel() for p in self.unet.parameters() if p.requires_grad)
-        print(f"UNet: {unet_trainable:,} / {unet_total:,} trainable ({100*unet_trainable/unet_total:.1f}% )")
+        print(f"UNet: {unet_trainable:,} / {unet_total:,} trainable ({100*unet_trainable/unet_total:.1f}%)")
 
     def _encode(self, images):
         """

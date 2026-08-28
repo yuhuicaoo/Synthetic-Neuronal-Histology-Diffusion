@@ -16,7 +16,7 @@ from utils.plotting import plot_metrics, plot_scores
 
 if __name__ == "__main__":
     ds_root = Path("Neuron Dataset")
-    save_dir = Path("saves/mask_training_2")
+    save_dir = Path("saves/mask_training_3")
     os.makedirs(save_dir, exist_ok=True)
 
     # load data
@@ -47,9 +47,9 @@ if __name__ == "__main__":
     )
     
     # image_train_loader = DataLoader(
-    #     NeuronDataset(train_ds, config=config, train=True, augment=True, aug_prob=0.25), 
+    #     NeuronDataset(train_ds, config=config, train=True, augment=True, aug_prob=0.25, filter_empty_patches=True), 
     #     batch_size = 2, 
-    #     shuffle=True, 
+    #     shuffle = True, 
     #     num_workers = 4, 
     #     pin_memory=True, 
     #     persistent_workers=True,

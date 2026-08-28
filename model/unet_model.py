@@ -48,7 +48,7 @@ class ResNetBlock(nn.Module):
 
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size = 3, padding = 1)
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size = 3, padding = 1)
-        self.norm1 = nn.GroupNorm(num_groups = 8, num_channels = in_channels)
+        self.norm1 = nn.GroupNorm(num_groups = 8, num_channels = out_channels)
         self.norm2 = nn.GroupNorm(num_groups = 8, num_channels = out_channels)
         self.silu = nn.SiLU()
 
@@ -59,13 +59,13 @@ class ResNetBlock(nn.Module):
 
     def forward(self, x, t):
         # first convolution
-        h = self.conv1(self.silu(self.norm1(x)))
+        h = self.silu(self.norm1(self.conv1(x)))
 
         # time embeddings injection
         time_emb = self.silu(self.time_mlp(t))
         h = h+ time_emb[(...,) + (None,) * 2]       # broadcast time_emb:(B, C) -> (B, C, H, W)
         # second convolution
-        h = self.conv2(self.silu(self.norm2(h)))
+        h = self.silu(self.norm2(self.conv2(h)))
 
         # residual
         return h + self.residual_proj(x)
