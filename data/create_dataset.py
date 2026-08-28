@@ -133,7 +133,7 @@ class BasePatchDataset(Dataset):
 
         if filtered:
             # filter out empty patches (filter mainly for diffusion training, should be off for segmentation training)
-            patches = [(i_patch, m_patch) for i_patch, m_patch in patches if np.sum(m_patch > 0) > 20]
+            patches = [(i_patch, m_patch) for i_patch, m_patch in patches if (m_patch > 0).any()]
 
         if self.train:
             if len(patches) > self.config.num_patches:
@@ -146,12 +146,16 @@ class BasePatchDataset(Dataset):
             return patches[:self.config.num_patches]
 
 class NeuronDataset(BasePatchDataset):
+    def __init__(self, dataset, config: PatchConfig, train=True, augment=False, aug_prob=0.1, filter_empty_patches=False):
+        super().__init__(dataset, config, train=train, augment=augment, aug_prob=aug_prob)
+        self.filter_empty = filter_empty_patches
+
     def __getitem__(self, idx):
         sample = self.dataset[idx]
         mask = sample['mask']                                       # (H, W)
         image = sample['image'].astype(np.float32) / 255.0          # (H,W,C) [0,255] --> [0, 1]
 
-        patches = self._get_patches(image, mask, filtered=False)
+        patches = self._get_patches(image, mask, filtered=self.filter_empty)
 
         results = []
         for img_patch, mask_patch in patches:

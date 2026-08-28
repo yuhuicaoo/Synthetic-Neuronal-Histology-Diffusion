@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = '3'
+os.environ["CUDA_VISIBLE_DEVICES"] = '4'
 os.environ['HF_HOME'] = '/eresearch/hie/ycao891/Yuhui/hf_cache'
 os.environ['TORCH_HOME'] = '/eresearch/hie/ycao891/Yuhui/torch_cache'
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     # dataloaders
     mask_train_loader = DataLoader(
-        NeuronDataset(train_ds, config=config, train=True, augment=True, aug_prob=0.25),
+        NeuronDataset(train_ds, config=config, train=True, augment=True, aug_prob=0.25, filter_empty_patches=False),
         batch_size = 2, 
         shuffle=True, 
         num_workers=4, 
