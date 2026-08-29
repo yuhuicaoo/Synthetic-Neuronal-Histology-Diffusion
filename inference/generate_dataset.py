@@ -1,7 +1,12 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = '5'
+import sys
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '6'
 os.environ['HF_HOME'] = '/eresearch/hie/ycao891/Yuhui/hf_cache'
 os.environ['TORCH_HOME'] = '/eresearch/hie/ycao891/Yuhui/torch_cache'
+
+sys.path.append("/eresearch/hie/ycao891/Yuhui")
+
 
 import time
 import math
@@ -21,8 +26,8 @@ if __name__ == '__main__':
     os.makedirs(save_dir, exist_ok=True)
 
     model_base_path = Path('saves')
-    image_model_path = model_base_path / f'image_training_3/image_epoch500.pth'
-    mask_model_path = model_base_path / f'mask_training_2/model_best.pth'
+    image_model_path = model_base_path / f'image_training_4/image_best.pth'
+    mask_model_path = model_base_path / f'mask_training_3/model_best.pth'
 
     config = DiffusionConfig()
 
@@ -38,7 +43,6 @@ if __name__ == '__main__':
         config=config,
         pretrained_model='sd-legacy/stable-diffusion-v1-5',
         train_unet=False,
-        unfreeze_last_n_down_blocks=0,
         use_unet_lora=False,
         lora_rank=4
     ).to(config.device)
@@ -48,8 +52,8 @@ if __name__ == '__main__':
     # image_model.unet.load_state_dict(checkpoint_image['unet_lora'], strict=False)
     image_model.eval()
 
-    n_patches_per_combo = 20
-    batch_size = 4
+    n_patches_per_combo = 50
+    batch_size = 8
     label_combos = list(itertools.product(TREATMENT_GROUPS, REGION_GROUPS))
 
     for c in tqdm(label_combos, desc='Inference'):
