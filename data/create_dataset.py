@@ -9,6 +9,9 @@ import albumentations as A
 import scipy.ndimage as ndi
 from collections import defaultdict
 import pandas as pd
+from skimage.segmentation import relabel_sequential
+import torch.nn.functional as F
+
 
 class BasePatchDataset(Dataset):
     def __init__(self, dataset, config: PatchConfig, train=True, augment=False, aug_prob=0.1):
@@ -202,8 +205,6 @@ class NeuronPatchDataset(Dataset):
             "region_label": torch.tensor(REGION_MAP[sample['region']], dtype=torch.long),
         }
 
-
-
 class PatchDataset(Dataset):
     def __init__(self, patch_ds, train=True, use_albu=False, augment_prob=0.25):
         super().__init__()
@@ -308,7 +309,6 @@ class PatchDatasetComparison(Dataset):
             return np.full(n_channels, np.nan) , np.full(n_channels, np.nan)
         return np.mean(pixels, axis=0), np.std(pixels, axis=0)      
 
-
     def calc_patch_stats_df(self):
         results = []
         for patch in self.patch_ds:
@@ -335,4 +335,51 @@ class PatchDatasetComparison(Dataset):
             })
 
         return pd.DataFrame(results)
-        
+
+class HoVerNetDataset(Dataset):
+    def __init__(self, patch_ds, train=True, augment_prob=0.25):
+        self.patch_ds = patch_ds
+        self.train = train
+        self.transforms = A.Compose([
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.5),
+            A.RandomRotate90(p=0.5),
+            A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
+            A.Affine(rotate=(-10, 10), scale=(0.9, 1.1), translate_percent=(-0.1, 0.1), p=0.5),
+        ], p=augment_prob)
+
+    def __len__(self):
+        return len(self.patch_ds)
+
+    def _center_crop(self, x, size):
+        h, w = x.shape[-2:]
+        t, l = (h - size) // 2, (w - size) // 2
+        return x[..., t:t + size, l:l +size]
+
+    def __getitem__(self, idx):
+        sample = self.patch_ds[idx]
+        img_patch, mask_patch = sample
+
+        if self.train:
+            augmented = self.transforms(image=img_patch, mask=mask_patch.astype(np.uint16))
+            img_patch, mask_patch = augmented['image'], augmented['mask']
+
+        mask_patch, _, _ = relabel_sequential(mask_patch.astype(np.int32))
+        hv = create_neuron_structure(mask_patch)[1:]        # (2, H, W) stacked horizontal and vertical distance maps
+        binary = (mask_patch > 0).astype(np.int64)          # (H, W) binary map
+
+        # crop labels to 164x164
+        binary = self._center_crop(binary, 164)
+        hv = self._center_crop(hv, 164)
+        inst = self._center_crop(mask_patch, 164)
+
+        binary_t = torch.from_numpy(np.ascontiguousarray(binary)).long()
+        label = F.one_hot(binary_t, 2).permute(2, 0, 1).float()   # (2, 164, 164)
+
+        img_patch = torch.from_numpy(np.ascontiguousarray(img_patch.transpose(2, 0, 1))).float()
+        return {
+            'image': img_patch,
+            'binary_map': label,
+            'hv_map': torch.from_numpy(np.ascontiguousarray(hv)).float(),
+            'instance_map': torch.from_numpy(np.ascontiguousarray(inst)).int(),
+        }

@@ -202,3 +202,8 @@ def get_patches_2(dataset, config:PatchConfig, filter_empty=False):
         patches.extend(curr_patches[:config.num_patches])
     print(len(patches))
     return patches
+
+def count_params(model):
+    total = sum(p.numel() for p in model.parameters())
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return total, trainable
